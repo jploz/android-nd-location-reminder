@@ -9,6 +9,7 @@ import com.udacity.locationreminder.base.NavigationCommand
 import com.udacity.locationreminder.databinding.FragmentRemindersBinding
 import com.udacity.locationreminder.utils.setDisplayHomeAsUpEnabled
 import com.udacity.locationreminder.utils.setTitle
+import com.udacity.locationreminder.utils.setup
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ReminderListFragment : BaseFragment() {

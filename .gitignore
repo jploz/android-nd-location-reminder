@@ -87,3 +87,6 @@ lint/tmp/
 
 # MacOS files
 .DS_Store
+
+# Android
+google-services.json
