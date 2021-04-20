@@ -6,7 +6,7 @@ apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
-    buildToolsVersion "29.0.3"
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.udacity.locationreminder"
@@ -48,9 +48,7 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
     // App dependencies
@@ -70,6 +68,8 @@ dependencies {
 
     // Add the dependencies for the desired Firebase products
     // https://firebase.google.com/docs/android/setup#available-libraries
+    implementation 'com.google.firebase:firebase-auth-ktx:20.0.4'
+    implementation 'com.firebaseui:firebase-ui-auth:7.1.1'
 
     // Architecture Components
     //Navigation dependencies
