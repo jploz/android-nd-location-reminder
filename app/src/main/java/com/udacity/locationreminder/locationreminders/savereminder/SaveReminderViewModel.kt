@@ -1,8 +1,10 @@
 package com.udacity.locationreminder.locationreminders.savereminder
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PointOfInterest
 import com.udacity.locationreminder.R
 import com.udacity.locationreminder.base.BaseViewModel
@@ -35,12 +37,38 @@ class SaveReminderViewModel(val app: Application, private val dataSource: Remind
         longitude.value = null
     }
 
+    fun setSelectedLocation(poi: PointOfInterest?, latLng: LatLng?) {
+        selectedPOI.value = poi
+        latitude.value = latLng?.latitude
+        longitude.value = latLng?.longitude
+        if (poi != null) {
+            reminderSelectedLocationStr.value = poi.name
+        } else {
+            reminderSelectedLocationStr.value = "User defined location"
+        }
+    }
+
     /**
      * Validate the entered data then saves the reminder data to the DataSource
      */
-    fun validateAndSaveReminder(reminderData: ReminderDataItem) {
+    fun validateAndSaveReminder() {
+        val reminderData = ReminderDataItem(
+            reminderTitle.value,
+            reminderDescription.value,
+            reminderSelectedLocationStr.value,
+            latitude.value,
+            longitude.value
+        )
+        Log.d(
+            TAG,
+            "Title: $reminderTitle.value, descr: $reminderDescription.value, " +
+                    "location: $reminderSelectedLocationStr.value, " +
+                    "lat/long: ${latitude.value}/${longitude.value}"
+        )
         if (validateEnteredData(reminderData)) {
+            // in order to start fresh after a reminder was saved, clear the view model
             saveReminder(reminderData)
+            onClear()
         }
     }
 
@@ -60,10 +88,11 @@ class SaveReminderViewModel(val app: Application, private val dataSource: Remind
                     reminderData.id
                 )
             )
-            showLoading.value = false
-            showToast.value = app.getString(R.string.reminder_saved)
-            navigationCommand.value = NavigationCommand.Back
         }
+        showLoading.value = false
+        showToast.value = app.getString(R.string.reminder_saved)
+        navigationCommand.value =
+            NavigationCommand.To(SaveReminderFragmentDirections.actionSaveReminderFragmentToReminderListFragment())
     }
 
     /**
