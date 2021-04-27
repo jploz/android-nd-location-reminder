@@ -1,10 +1,14 @@
 package com.udacity.locationreminder.utils
 
 import android.view.View
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
+import com.udacity.locationreminder.R
 import com.udacity.locationreminder.base.BaseRecyclerViewAdapter
+import com.udacity.locationreminder.locationreminders.reminderslist.ReminderDataItem
+import java.util.*
 
 
 object BindingAdapters {
@@ -43,5 +47,16 @@ object BindingAdapters {
                     view.fadeOut()
             }
         }
+    }
+
+    @BindingAdapter("app:latLng")
+    @JvmStatic
+    fun setLatLng(view: TextView, reminder: ReminderDataItem) {
+        view.text = String.format(
+            Locale.getDefault(),
+            view.context.getString(R.string.lat_long_snippet),
+            reminder.latitude,
+            reminder.longitude
+        )
     }
 }
