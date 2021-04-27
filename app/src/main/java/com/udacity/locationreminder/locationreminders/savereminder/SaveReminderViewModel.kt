@@ -51,7 +51,7 @@ class SaveReminderViewModel(val app: Application, private val dataSource: Remind
     /**
      * Validate the entered data then saves the reminder data to the DataSource
      */
-    fun validateAndSaveReminder() {
+    fun validateAndSaveReminder(): ReminderDataItem? {
         val reminderData = ReminderDataItem(
             reminderTitle.value,
             reminderDescription.value,
@@ -69,7 +69,9 @@ class SaveReminderViewModel(val app: Application, private val dataSource: Remind
             // in order to start fresh after a reminder was saved, clear the view model
             saveReminder(reminderData)
             onClear()
+            return reminderData
         }
+        return null
     }
 
     /**
