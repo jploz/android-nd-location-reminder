@@ -24,10 +24,13 @@ import com.udacity.locationreminder.authentication.AuthenticationActivity
 import com.udacity.locationreminder.base.BaseFragment
 import com.udacity.locationreminder.base.NavigationCommand
 import com.udacity.locationreminder.databinding.FragmentRemindersBinding
+import com.udacity.locationreminder.locationreminders.ReminderDescriptionActivity
 import com.udacity.locationreminder.utils.setDisplayHomeAsUpEnabled
 import com.udacity.locationreminder.utils.setTitle
 import com.udacity.locationreminder.utils.setup
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
+private const val TAG = "ReminderListFragment"
 
 private val runningQOrLater = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q
 private const val REQUEST_FOREGROUND_AND_BACKGROUND_PERMISSION_RESULT_CODE = 33
@@ -37,10 +40,6 @@ private const val LOCATION_PERMISSION_INDEX = 0
 private const val BACKGROUND_LOCATION_PERMISSION_INDEX = 1
 
 class ReminderListFragment : BaseFragment() {
-
-    companion object {
-        private const val TAG = "ReminderListFragment"
-    }
 
     //use Koin to retrieve the ViewModel instance
     override val _viewModel: RemindersListViewModel by viewModel()
@@ -55,6 +54,7 @@ class ReminderListFragment : BaseFragment() {
                 inflater,
                 R.layout.fragment_reminders, container, false
             )
+        binding.lifecycleOwner = this
         binding.viewModel = _viewModel
 
         setHasOptionsMenu(true)
@@ -68,7 +68,6 @@ class ReminderListFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.lifecycleOwner = this
         setupRecyclerView()
         binding.addReminderFAB.setOnClickListener {
             navigateToAddReminder()
@@ -97,10 +96,16 @@ class ReminderListFragment : BaseFragment() {
 
     private fun setupRecyclerView() {
         val adapter = RemindersListAdapter {
+            navigateToReminderDetails(it)
         }
 
-//        setup the recycler view using the extension function
+        // setup the recycler view using the extension function
         binding.reminderssRecyclerView.setup(adapter)
+    }
+
+    private fun navigateToReminderDetails(item: ReminderDataItem) {
+        val intent = ReminderDescriptionActivity.newIntent(requireContext(), item)
+        startActivity(intent)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
