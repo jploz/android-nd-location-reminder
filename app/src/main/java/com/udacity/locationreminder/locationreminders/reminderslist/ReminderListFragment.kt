@@ -118,6 +118,9 @@ class ReminderListFragment : BaseFragment() {
                         navigateToAuthenticationActivity()
                     }
             }
+            R.id.action_delete_all -> {
+                _viewModel.deleteAllReminders()
+            }
         }
         return super.onOptionsItemSelected(item)
     }
