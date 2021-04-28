@@ -44,7 +44,9 @@
         </activity>
         <activity android:name="com.udacity.locationreminder.authentication.AuthenticationActivity" />
         <activity android:name="com.udacity.locationreminder.locationreminders.RemindersActivity" />
-        <activity android:name="com.udacity.locationreminder.locationreminders.ReminderDescriptionActivity" />
+        <activity
+            android:name="com.udacity.locationreminder.locationreminders.ReminderDescriptionActivity"
+            android:parentActivityName="com.udacity.locationreminder.locationreminders.RemindersActivity" />
 
         <receiver
             android:name="com.udacity.locationreminder.locationreminders.geofence.GeofenceBroadcastReceiver"
