@@ -40,8 +40,10 @@ private const val BACKGROUND_LOCATION_PERMISSION_INDEX = 1
 
 
 class SaveReminderFragment : BaseFragment() {
+
     //Get the view model this time as a single to be shared with the another fragment
     override val _viewModel: SaveReminderViewModel by inject()
+
     private lateinit var binding: FragmentSaveReminderBinding
 
     private lateinit var geofencingClient: GeofencingClient
@@ -49,7 +51,6 @@ class SaveReminderFragment : BaseFragment() {
     private val geofencePendingIntent: PendingIntent by lazy {
         val intent = Intent(requireContext(), GeofenceBroadcastReceiver::class.java)
         intent.action = ACTION_GEOFENCE_EVENT
-        // Add request code
         PendingIntent.getBroadcast(
             requireContext(),
             0,
@@ -162,8 +163,8 @@ class SaveReminderFragment : BaseFragment() {
     }
 
     /*
-     *  Uses the Location Client to check the current state of location settings, and gives the user
-     *  the opportunity to turn on location services within our app.
+     *  Uses the Location Client to check the current state of location settings,
+     *  and gives the user the opportunity to turn on location services within our app.
      */
     private fun checkDeviceLocationSettingsAndStartGeofence(resolve: Boolean = true) {
         Log.i(TAG, "checkDeviceLocationSettingsAndStartGeofence")
@@ -261,7 +262,6 @@ class SaveReminderFragment : BaseFragment() {
             checkDeviceLocationSettingsAndStartGeofence(false)
         }
     }
-
 
     @Suppress("MissingPermission")
     private fun addGeofenceForReminder(reminderId: String, lat: Double, lng: Double) {

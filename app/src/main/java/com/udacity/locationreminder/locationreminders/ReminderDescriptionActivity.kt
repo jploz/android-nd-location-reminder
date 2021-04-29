@@ -83,6 +83,8 @@ class ReminderDescriptionActivity : AppCompatActivity() {
     }
 
     private fun removeGeofence(reminderId: String) {
+        // TODO: does removing geofences require permissions?
+        // TODO: probably add permissions check here
 //        if (!foregroundAndBackgroundLocationPermissionApproved()) {
 //            return
 //        }

@@ -26,7 +26,6 @@ class GeofenceTransitionsJobIntentService : JobIntentService(), CoroutineScope {
     //Get the local repository instance
     private val remindersLocalRepository: ReminderDataSource by inject()
 
-
     companion object {
         private const val JOB_ID = 573
 

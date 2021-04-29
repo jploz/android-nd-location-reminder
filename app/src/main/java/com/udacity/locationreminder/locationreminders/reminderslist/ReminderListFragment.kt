@@ -98,6 +98,7 @@ class ReminderListFragment : BaseFragment() {
 
     override fun onStart() {
         super.onStart()
+        // this fragment is the main screen for logged in user, so permissions are checked here first
         checkPermissionsAndStartGeofencing()
     }
 
@@ -150,7 +151,7 @@ class ReminderListFragment : BaseFragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-//        display logout as menu item
+        // display logout as menu item
         inflater.inflate(R.menu.main_menu, menu)
     }
 

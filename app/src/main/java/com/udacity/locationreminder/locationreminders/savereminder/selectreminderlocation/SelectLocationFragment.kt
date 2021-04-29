@@ -158,10 +158,10 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
                 )
             )
             if (!success) {
-                Log.e(TAG, "Style parsing failed.")
+                Log.e(TAG, "Map style parsing failed.")
             }
         } catch (e: Resources.NotFoundException) {
-            Log.e(TAG, "Can't find style. Error: ", e)
+            Log.e(TAG, "Cannot find map style. Error: $e")
         }
     }
 

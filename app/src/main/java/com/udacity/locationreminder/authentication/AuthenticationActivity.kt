@@ -46,9 +46,8 @@ class AuthenticationActivity : AppCompatActivity() {
         // this avoids redirection loops when users logout and are then send back to this
         // login screen
 
-//          TODO: a bonus is to customize the sign in flow to look nice using :
+        // TODO: a bonus is to customize the sign in flow to look nice using :
         //https://github.com/firebase/FirebaseUI-Android/blob/master/auth/README.md#custom-layout
-
     }
 
     private fun launchSignInFlow() {
