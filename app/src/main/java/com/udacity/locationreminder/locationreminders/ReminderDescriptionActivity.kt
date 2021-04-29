@@ -3,15 +3,21 @@ package com.udacity.locationreminder.locationreminders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import com.google.android.gms.location.GeofencingClient
+import com.google.android.gms.location.LocationServices
 import com.udacity.locationreminder.R
 import com.udacity.locationreminder.databinding.ActivityReminderDescriptionBinding
 import com.udacity.locationreminder.locationreminders.reminderslist.ReminderDataItem
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
+
+private const val TAG = "ReminderDescription..."
 
 /**
  * Activity that displays the reminder details after the user clicks on the notification
@@ -35,6 +41,8 @@ class ReminderDescriptionActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityReminderDescriptionBinding
 
+    private lateinit var geofencingClient: GeofencingClient
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(
@@ -45,6 +53,8 @@ class ReminderDescriptionActivity : AppCompatActivity() {
             intent.getSerializableExtra(EXTRA_ReminderDataItem) as ReminderDataItem
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        geofencingClient = LocationServices.getGeofencingClient(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -56,8 +66,11 @@ class ReminderDescriptionActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_delete -> {
-                viewModel.deleteReminder(binding.reminderDataItem)
-                navigateToReminderList()
+                binding.reminderDataItem?.let {
+                    viewModel.deleteReminder(it.id)
+                    removeGeofence(it.id)
+                    navigateToReminderList()
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -67,5 +80,20 @@ class ReminderDescriptionActivity : AppCompatActivity() {
     private fun navigateToReminderList() {
         val intent = Intent(this, RemindersActivity::class.java)
         startActivity(intent)
+    }
+
+    private fun removeGeofence(reminderId: String) {
+//        if (!foregroundAndBackgroundLocationPermissionApproved()) {
+//            return
+//        }
+        val requestIds = listOf(reminderId)
+        geofencingClient.removeGeofences(requestIds).run {
+            addOnSuccessListener {
+                Log.d(TAG, "Geofence removed (id = $reminderId)")
+            }
+            addOnFailureListener {
+                Log.e(TAG, "Unable to remove geofence with id = $reminderId")
+            }
+        }
     }
 }

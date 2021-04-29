@@ -2,6 +2,7 @@ package com.udacity.locationreminder.locationreminders.reminderslist
 
 import android.Manifest
 import android.annotation.TargetApi
+import android.app.PendingIntent
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
@@ -10,10 +11,12 @@ import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.firebase.ui.auth.AuthUI
 import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.GeofencingClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationSettingsRequest
@@ -25,6 +28,8 @@ import com.udacity.locationreminder.base.BaseFragment
 import com.udacity.locationreminder.base.NavigationCommand
 import com.udacity.locationreminder.databinding.FragmentRemindersBinding
 import com.udacity.locationreminder.locationreminders.ReminderDescriptionActivity
+import com.udacity.locationreminder.locationreminders.geofence.ACTION_GEOFENCE_EVENT
+import com.udacity.locationreminder.locationreminders.geofence.GeofenceBroadcastReceiver
 import com.udacity.locationreminder.utils.setDisplayHomeAsUpEnabled
 import com.udacity.locationreminder.utils.setTitle
 import com.udacity.locationreminder.utils.setup
@@ -43,7 +48,22 @@ class ReminderListFragment : BaseFragment() {
 
     //use Koin to retrieve the ViewModel instance
     override val _viewModel: RemindersListViewModel by viewModel()
+
     private lateinit var binding: FragmentRemindersBinding
+
+    private lateinit var geofencingClient: GeofencingClient
+
+    private val geofencePendingIntent: PendingIntent by lazy {
+        val intent = Intent(requireContext(), GeofenceBroadcastReceiver::class.java)
+        intent.action = ACTION_GEOFENCE_EVENT
+        // Add request code
+        PendingIntent.getBroadcast(
+            requireContext(),
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,6 +82,8 @@ class ReminderListFragment : BaseFragment() {
         setTitle(getString(R.string.app_name))
 
         binding.refreshLayout.setOnRefreshListener { _viewModel.loadReminders() }
+
+        geofencingClient = LocationServices.getGeofencingClient(requireContext())
 
         return binding.root
     }
@@ -120,6 +142,7 @@ class ReminderListFragment : BaseFragment() {
             }
             R.id.action_delete_all -> {
                 _viewModel.deleteAllReminders()
+                removeGeofences()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -288,5 +311,25 @@ class ReminderListFragment : BaseFragment() {
 
     private fun addGeofenceForReminder() {
         Log.i(TAG, "called addGeofenceForReminder")
+    }
+
+    /**
+     * Removes geofences. This method should be called after the user has granted the location
+     * permission.
+     */
+    private fun removeGeofences() {
+        if (!foregroundAndBackgroundLocationPermissionApproved()) {
+            return
+        }
+        geofencingClient.removeGeofences(geofencePendingIntent)?.run {
+            addOnSuccessListener {
+                Log.d(TAG, getString(R.string.geofences_removed))
+                Toast.makeText(requireContext(), R.string.geofences_removed, Toast.LENGTH_SHORT)
+                    .show()
+            }
+            addOnFailureListener {
+                Log.d(TAG, getString(R.string.geofences_not_removed))
+            }
+        }
     }
 }
