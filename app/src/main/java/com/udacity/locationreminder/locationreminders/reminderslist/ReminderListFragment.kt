@@ -322,7 +322,7 @@ class ReminderListFragment : BaseFragment() {
         if (!foregroundAndBackgroundLocationPermissionApproved()) {
             return
         }
-        geofencingClient.removeGeofences(geofencePendingIntent)?.run {
+        geofencingClient.removeGeofences(geofencePendingIntent).run {
             addOnSuccessListener {
                 Log.d(TAG, getString(R.string.geofences_removed))
                 Toast.makeText(requireContext(), R.string.geofences_removed, Toast.LENGTH_SHORT)

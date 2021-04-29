@@ -20,6 +20,10 @@ class FakeDataSource : ReminderDataSource {
         TODO("return the reminder with the id")
     }
 
+    override suspend fun deleteReminder(id: String) {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun deleteAllReminders() {
         TODO("delete all the reminders")
     }

@@ -1,11 +1,11 @@
 package com.udacity.locationreminder.locationreminders.data.local
 
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.filters.SmallTest;
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.SmallTest
 
-import org.junit.runner.RunWith;
+import org.junit.runner.RunWith
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi;
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)

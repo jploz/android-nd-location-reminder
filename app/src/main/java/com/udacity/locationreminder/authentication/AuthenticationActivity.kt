@@ -84,7 +84,7 @@ class AuthenticationActivity : AppCompatActivity() {
 
     private fun navigateToRemindersActivity() {
         val intent = Intent(this, RemindersActivity::class.java)
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
     }
 }

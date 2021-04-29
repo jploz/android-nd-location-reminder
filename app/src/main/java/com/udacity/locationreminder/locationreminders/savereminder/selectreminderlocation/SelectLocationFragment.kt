@@ -260,7 +260,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     }
 
     private fun setMapClick() {
-        map.setOnMapClickListener { latLng ->
+        map.setOnMapClickListener { _ ->
             map.clear()
             selectLocationViewModel.clearLocations()
         }

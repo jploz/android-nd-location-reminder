@@ -30,6 +30,7 @@ class RemindersListViewModel(
             when (result) {
                 is Result.Success<*> -> {
                     val dataList = ArrayList<ReminderDataItem>()
+                    @Suppress("UNCHECKED_CAST")
                     dataList.addAll((result.data as List<ReminderDTO>).map { reminder ->
                         //map the reminder data from the DB to the be ready to be displayed on the UI
                         ReminderDataItem(
@@ -62,7 +63,7 @@ class RemindersListViewModel(
     fun deleteAllReminders() {
         viewModelScope.launch {
             dataSource.deleteAllReminders()
-            remindersList.value = ArrayList<ReminderDataItem>()
+            remindersList.value = ArrayList()
             invalidateShowNoData()
         }
     }

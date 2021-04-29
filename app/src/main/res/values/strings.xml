@@ -45,4 +45,6 @@
     <string name="button_to_save_selected_location">Button to save selected location</string>
     <string name="delete">Delete</string>
     <string name="delete_all">Delete all</string>
+    <string name="descr_save_reminder_fab">Button to save the new reminder.</string>
+    <string name="descr_new_reminder_fab">Button to create a new reminder.</string>
 </resources>

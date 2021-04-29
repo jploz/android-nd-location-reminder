@@ -47,6 +47,7 @@ class MyApp : Application() {
                 //This view model is declared singleton to be used across multiple fragments
                 AuthenticationViewModel(get())
             }
+            @Suppress("USELESS_CAST")
             single { RemindersLocalRepository(get()) as ReminderDataSource }
             single { LocalDB.createRemindersDao(this@MyApp) }
         }

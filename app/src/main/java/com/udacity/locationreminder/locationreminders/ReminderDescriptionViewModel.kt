@@ -6,8 +6,6 @@ import com.udacity.locationreminder.base.BaseViewModel
 import com.udacity.locationreminder.locationreminders.data.ReminderDataSource
 import kotlinx.coroutines.launch
 
-private const val TAG = "ReminderDescriptionViewModel"
-
 class ReminderDescriptionViewModel(
     val app: Application,
     private val dataSource: ReminderDataSource
