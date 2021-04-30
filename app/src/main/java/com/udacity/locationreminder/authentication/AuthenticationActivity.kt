@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.firebase.ui.auth.AuthUI
@@ -13,6 +15,7 @@ import com.udacity.locationreminder.databinding.ActivityAuthenticationBinding
 import com.udacity.locationreminder.locationreminders.RemindersActivity
 import org.koin.android.ext.android.inject
 
+private const val TAG = "AuthenticationActivity"
 
 /**
  * Login screen; asks the users to sign in / register,
@@ -21,12 +24,27 @@ import org.koin.android.ext.android.inject
 class AuthenticationActivity : AppCompatActivity() {
 
     private val authViewModel: AuthenticationViewModel by inject()
+
     private lateinit var binding: ActivityAuthenticationBinding
 
-    companion object {
-        const val TAG = "AuthenticationActivity"
-        const val SIGN_IN_RESULT_CODE = 1001
-    }
+    private val openAuthUiActivity =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+        { result: ActivityResult ->
+            Log.d(TAG, "resultCode: ${ActivityResult.resultCodeToString(result.resultCode)}")
+            val response = IdpResponse.fromResultIntent(result.data)
+            if (result.resultCode == Activity.RESULT_OK) {
+                Log.i(
+                    TAG,
+                    "Successfully signed in user: ${authViewModel.currentUser?.displayName}!"
+                )
+                navigateToRemindersActivity()
+            } else {
+                // Sign in failed. If response is null the user canceled the
+                // sign-in flow using the back button. Otherwise check
+                // response.getError().getErrorCode() and handle the error.
+                Log.i(TAG, "Sign in failed: ${response?.error?.errorCode}")
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,32 +72,12 @@ class AuthenticationActivity : AppCompatActivity() {
         val providers = arrayListOf(
             AuthUI.IdpConfig.EmailBuilder().build(), AuthUI.IdpConfig.GoogleBuilder().build()
         )
-        startActivityForResult(
+        openAuthUiActivity.launch(
             AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
-                .build(),
-            SIGN_IN_RESULT_CODE
+                .build()
         )
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == SIGN_IN_RESULT_CODE) {
-            val response = IdpResponse.fromResultIntent(data)
-            if (resultCode == Activity.RESULT_OK) {
-                Log.i(
-                    TAG,
-                    "Successfully signed in user: ${authViewModel.currentUser?.displayName}!"
-                )
-                navigateToRemindersActivity()
-            } else {
-                // Sign in failed. If response is null the user canceled the
-                // sign-in flow using the back button. Otherwise check
-                // response.getError().getErrorCode() and handle the error.
-                Log.i(TAG, "Sign in failed: ${response?.error?.errorCode}")
-            }
-        }
     }
 
     private fun navigateToRemindersActivity() {
