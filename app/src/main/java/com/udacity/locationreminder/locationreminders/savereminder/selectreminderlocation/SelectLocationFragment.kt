@@ -12,7 +12,6 @@ import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.view.*
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -28,16 +27,15 @@ import com.udacity.locationreminder.R
 import com.udacity.locationreminder.base.BaseFragment
 import com.udacity.locationreminder.base.NavigationCommand
 import com.udacity.locationreminder.databinding.FragmentSelectLocationBinding
+import com.udacity.locationreminder.locationreminders.geofence.LOCATION_PERMISSION_INDEX
+import com.udacity.locationreminder.locationreminders.geofence.REQUEST_LOCATION_PERMISSION
+import com.udacity.locationreminder.locationreminders.geofence.foregroundLocationPermissionApproved
 import com.udacity.locationreminder.locationreminders.savereminder.SaveReminderViewModel
 import com.udacity.locationreminder.utils.setDisplayHomeAsUpEnabled
 import org.koin.android.ext.android.inject
 import java.util.*
 
-
 private const val TAG = "SelectLocationFragment"
-private const val REQUEST_LOCATION_PERMISSION = 35
-private const val LOCATION_PERMISSION_INDEX = 0
-
 
 class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
@@ -165,21 +163,11 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         }
     }
 
-    private fun isPermissionAccessLocationGranted(): Boolean {
-        return PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) || PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        )
-    }
-
     @SuppressLint("MissingPermission")
     private fun enableMyLocation() {
         Log.d(TAG, "enableMyLocation called")
         // TODO: check also if location service is enabled
-        if (!isPermissionAccessLocationGranted()) {
+        if (!foregroundLocationPermissionApproved(requireContext())) {
             val permissionsArray = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
             @Suppress("DEPRECATION")
             requestPermissions(permissionsArray, REQUEST_LOCATION_PERMISSION)
@@ -260,7 +248,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     }
 
     private fun setMapClick() {
-        map.setOnMapClickListener { _ ->
+        map.setOnMapClickListener {
             map.clear()
             selectLocationViewModel.clearLocations()
         }
