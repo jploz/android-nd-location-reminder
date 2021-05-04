@@ -36,6 +36,7 @@ ext {
     minSdkVersion = 21
     targetSdkVersion = 30
     compileSdkVersion = 30
+    buildToolsVersion = '30.0.3'
 
     // App dependencies
     androidXVersion = '1.0.0'
@@ -61,7 +62,7 @@ ext {
     androidXTestExtKotlinRunnerVersion = '1.1.2'
     archTestingVersion = '2.1.0'
     playServicesLocationVersion = '18.0.0'
-    playServicesMapsVersion = '17.0.0'
+    playServicesMapsVersion = '17.0.1'
     hamcrestVersion = '1.3'
     androidXTestRulesVersion = '1.3.0'
     espressoVersion = '3.3.0'

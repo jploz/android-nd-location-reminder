@@ -1,12 +1,14 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-apply plugin: "androidx.navigation.safeargs.kotlin"
-apply plugin: 'com.google.gms.google-services'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'androidx.navigation.safeargs.kotlin'
+    id 'com.google.gms.google-services'
+}
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
-    buildToolsVersion "30.0.3"
+    buildToolsVersion rootProject.buildToolsVersion
 
     defaultConfig {
         applicationId "com.udacity.locationreminder"
@@ -44,6 +46,19 @@ android {
 
     buildFeatures {
         dataBinding true
+    }
+
+    // workaround for error: More than one file was found with OS independent path 'META-INF/AL2.0'
+    // see https://github.com/Kotlin/kotlinx.coroutines/issues/2023
+    // and https://github.com/Kotlin/kotlinx.coroutines/tree/master/kotlinx-coroutines-debug#debug-agent-and-android
+    packagingOptions {
+        // for JNA and JNA-platform
+        exclude "META-INF/AL2.0"
+        exclude "META-INF/LGPL2.1"
+        // for byte-buddy
+        exclude "META-INF/licenses/ASM"
+        pickFirst "win32-x86-64/attach_hotspot_windows.dll"
+        pickFirst "win32-x86/attach_hotspot_windows.dll"
     }
 }
 
@@ -107,6 +122,8 @@ dependencies {
     testImplementation "androidx.test:core-ktx:$androidXTestCoreVersion"
     testImplementation "androidx.test.ext:junit-ktx:$androidXTestExtKotlinRunnerVersion"
     testImplementation "androidx.test:rules:$androidXTestRulesVersion"
+
+    testImplementation "org.robolectric:robolectric:$robolectricVersion"
 
     // AndroidX Test - Instrumented testing
     androidTestImplementation "androidx.test:core-ktx:$androidXTestCoreVersion"
