@@ -92,6 +92,13 @@ class RemindersDaoTest {
     }
 
     @Test
+    fun getReminderById_noData_returnsNull() = runBlockingTest {
+        val reminder = reminders[0]
+        val actual = database.reminderDao().getReminderById(reminder.id)
+        assertThat(actual, nullValue())
+    }
+
+    @Test
     fun deleteAllReminders_returnsNoData() = runBlockingTest {
         database.reminderDao().saveReminder(reminders[0])
         database.reminderDao().saveReminder(reminders[1])
