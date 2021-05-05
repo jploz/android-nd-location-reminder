@@ -119,4 +119,11 @@ class RemindersListViewModelTest {
         viewModel.loadReminders()
         assertThat(viewModel.remindersList.getOrAwaitValue().isEmpty(), `is`(false))
     }
+
+    @Test
+    fun remindersList_forceError_triggersSnackbarErrorMessage() = runBlockingTest {
+        repository.setShouldReturnError(true)
+        viewModel.loadReminders()
+        assertThat(viewModel.showSnackBar.getOrAwaitValue(), `is`("No reminders found"))
+    }
 }

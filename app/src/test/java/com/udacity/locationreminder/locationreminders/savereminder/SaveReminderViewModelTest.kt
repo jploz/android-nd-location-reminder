@@ -9,14 +9,14 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.udacity.locationreminder.R
 import com.udacity.locationreminder.locationreminders.MainCoroutineRule
 import com.udacity.locationreminder.locationreminders.data.FakeDataSource
+import com.udacity.locationreminder.locationreminders.data.dto.Result
 import com.udacity.locationreminder.locationreminders.getOrAwaitValue
 import com.udacity.locationreminder.locationreminders.reminderslist.ReminderDataItem
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.`is`
-import org.hamcrest.Matchers.nullValue
+import org.hamcrest.Matchers.*
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -152,6 +152,20 @@ class SaveReminderViewModelTest {
         assertThat(
             viewModel.showToast.getOrAwaitValue(),
             `is`(appContext.getString(R.string.reminder_saved))
+        )
+    }
+
+    @Test
+    fun validateAndSaveReminder_forceError_returnsError() = runBlockingTest {
+        repository.setShouldReturnError(true)
+        setCompleteReminder()
+        val reminder = viewModel.validateAndSaveReminder()
+        assertThat(reminder, notNullValue())
+        val id = reminder!!.id
+        assertThat(repository.getReminder(id), instanceOf(Result.Error::class.java))
+        assertThat(
+            repository.getReminder(id),
+            `is`(Result.Error("Reminder with id = $id not found"))
         )
     }
 }
