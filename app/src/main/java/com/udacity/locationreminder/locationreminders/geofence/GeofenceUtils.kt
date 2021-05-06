@@ -10,8 +10,6 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.location.GeofenceStatusCodes
 import com.udacity.locationreminder.R
 
-private const val TAG = "GeofenceUtils"
-
 val runningQOrLater = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q
 
 const val REQUEST_TURN_DEVICE_LOCATION_ON = 29

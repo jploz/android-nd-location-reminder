@@ -1,4 +1,4 @@
-package com.udacity.locationreminder
+package com.udacity.locationreminder.util
 
 import android.view.View
 import androidx.test.espresso.UiController

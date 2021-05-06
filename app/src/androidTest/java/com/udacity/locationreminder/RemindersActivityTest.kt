@@ -21,6 +21,7 @@ import com.udacity.locationreminder.locationreminders.reminderslist.RemindersLis
 import com.udacity.locationreminder.locationreminders.savereminder.SaveReminderViewModel
 import com.udacity.locationreminder.util.DataBindingIdlingResource
 import com.udacity.locationreminder.util.EspressoIdlingResource
+import com.udacity.locationreminder.util.clickOnViewChild
 import com.udacity.locationreminder.util.monitorActivity
 import kotlinx.coroutines.runBlocking
 import org.junit.After
