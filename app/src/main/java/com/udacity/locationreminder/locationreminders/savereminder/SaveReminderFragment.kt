@@ -107,7 +107,8 @@ class SaveReminderFragment : GeofenceBaseFragment() {
                     Log.i(TAG, "Geofence was successfully added")
                 }
                 addOnFailureListener {
-                    Log.w(TAG, "Unable to add Geofence")
+                    Log.w(TAG, "Unable to add Geofence: $it")
+                    _viewModel.showSnackBar.postValue("There was a problem to add geofence - please check device location settings (high accuracy).")
                 }
             }
         } else {
