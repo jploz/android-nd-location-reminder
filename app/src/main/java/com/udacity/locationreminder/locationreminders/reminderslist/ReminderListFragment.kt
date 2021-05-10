@@ -46,6 +46,8 @@ class ReminderListFragment : GeofenceBaseFragment() {
 
         binding.refreshLayout.setOnRefreshListener { _viewModel.loadReminders() }
 
+        rootView = binding.refreshLayout
+
         geofencingClient = LocationServices.getGeofencingClient(requireContext())
 
         return binding.root

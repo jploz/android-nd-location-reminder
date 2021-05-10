@@ -54,16 +54,19 @@ abstract class GeofenceBaseFragment : BaseFragment() {
         )
         if (foregroundAndBackgroundLocationPermissionApproved(requireContext()))
             return
-        var permissionsArray = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
-        val resultCode = when {
-            runningQOrLater -> {
-                permissionsArray += Manifest.permission.ACCESS_BACKGROUND_LOCATION
-                REQUEST_FOREGROUND_AND_BACKGROUND_PERMISSION_RESULT_CODE
+        if (!foregroundLocationPermissionApproved(requireContext())) {
+            val permissionsArray = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
+            val resultCode = REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE
+            @Suppress("DEPRECATION")
+            requestPermissions(permissionsArray, resultCode)
+        } else {
+            if (runningQOrLater) {
+                val permissionsArray = arrayOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+                val resultCode = REQUEST_BACKGROUND_ONLY_PERMISSIONS_REQUEST_CODE
+                @Suppress("DEPRECATION")
+                requestPermissions(permissionsArray, resultCode)
             }
-            else -> REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE
         }
-        @Suppress("DEPRECATION")
-        requestPermissions(permissionsArray, resultCode)
     }
 
     fun checkPermissionsAndStart() {
@@ -158,6 +161,7 @@ abstract class GeofenceBaseFragment : BaseFragment() {
                     })
                 }.show()
         } else {
+            requestForegroundAndBackgroundLocationPermissions()
             checkDeviceLocationSettingsAndStart()
         }
     }
