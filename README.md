@@ -28,6 +28,24 @@ This app makes use of following Android features:
 8. Use of Espresso and Mockito to test the app including DAO (Data Access Object) and Repository
    classes and End-To-End testing for the Fragments navigation.
 
+
+## Firebase API and Google maps API
+
+Firebase API and Google maps API require API keys for access and use.
+For privacy reasons, these keys are not included in the public code repository.
+
+In order to build the project, you need to
+
+1. add your your own `google-services.json` file to `app/` directory
+2. provide your own Google maps API key as described below.
+
+The build of this app is configured in a way that it uses a build configuration field for
+providing the necessary API key in the source code. It requires the definition of a string
+with name `GOOGLE_MAPS_API_KEY` in a local `gradle.properties` file (e.g. in `~/.gradle/gradle.properties`).
+Alternatively, you can override the value of the defined `resValue` directly in `app/build.gradle`
+(not recommended).
+
+
 ## Screenshots
 
 <img src="https://raw.githubusercontent.com/jploz/android-nd-location-reminder/main/screenshots/Screenshot_060852042.png" width="480"/>
